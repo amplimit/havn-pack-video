@@ -10,7 +10,9 @@
 # It also reads no ~/.config/watch/.env, takes no abbreviated options, runs
 # yt-dlp and ffmpeg from the pack (one CPU for ffmpeg), writes into the
 # workspace, prints paths relative to it, and tiles the frames into labelled
-# contact sheets.
+# contact sheets. Run as `havn_watch.py --yt-dlp ...` (the pack's yt-dlp
+# launcher), it runs yt-dlp with no configuration files and 2 fragments at a
+# time.
 from __future__ import annotations
 
 import argparse
@@ -36,6 +38,8 @@ LAUNCHERS: Path = ROOT / "bin"
 # ffmpeg starts threads per CPU it may use; the agent's process count is capped
 # (64 by default) and its runtime already holds many of them.
 CPUS: int = 1
+# yt-dlp fragments downloaded at once (upstream asks for 8).
+YTDLP_FRAGMENTS: str = "2"
 # Parts of sound for `transcribe`: short ones give finer times, long videos
 # take fewer calls (10 a minute for a user's agents, 80 s each at most).
 PART_SECONDS_SHORT: int = 60
@@ -310,7 +314,36 @@ def rewrite(report: str, base: Path) -> str:
     return re.sub(r"\n{3,}", "\n\n", text)
 
 
+def ytdlp_arguments(args: list[str]) -> list[str]:
+    out: list[str] = ["--ignore-config"]
+    fragments: bool = False
+    i: int = 0
+    while i < len(args):
+        arg: str = args[i]
+        if arg == "--":
+            out += args[i:]
+            break
+        if arg in ("-N", "--concurrent-fragments") and i + 1 < len(args):
+            out += [arg, YTDLP_FRAGMENTS]
+            fragments = True
+            i += 2
+            continue
+        if arg.startswith("--concurrent-fragments="):
+            arg = f"--concurrent-fragments={YTDLP_FRAGMENTS}"
+            fragments = True
+        out.append(arg)
+        i += 1
+    return out if fragments else [out[0], "-N", YTDLP_FRAGMENTS, *out[1:]]
+
+
+def run_ytdlp(args: list[str]) -> NoReturn:
+    python: str = str(ROOT / "venv" / "bin" / "python")
+    os.execv(python, [python, "-I", "-m", "yt_dlp", *ytdlp_arguments(args)])
+
+
 def main() -> int:
+    if sys.argv[1:2] == ["--yt-dlp"]:
+        run_ytdlp(sys.argv[2:])
     if not (SCRIPTS / "watch.py").is_file():
         fail(f"the /watch scripts are not at {SCRIPTS}: run havn-pack-video's setup.sh")
     limit_cpus()

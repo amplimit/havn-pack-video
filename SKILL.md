@@ -150,7 +150,10 @@ access like any tool: with no egress it fails; through the egress proxy, a
 domain not yet allowed waits for your owner's answer. Captions are fetched
 first, and `--detail transcript` downloads no video when there are any.
 YouTube may also need a JavaScript runtime that is not installed here; if
-yt-dlp says so, tell the user and ask for the file instead.
+yt-dlp says so, tell the user and ask for the file instead. A download runs
+more processes than a local file: if it fails with `Resource temporarily
+unavailable`, your process cap is too low (the pack asks for `pids_max`
+128); tell the user.
 
 ## Gemini (optional)
 

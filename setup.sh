@@ -252,12 +252,12 @@ install_watch() {
         --no-deps --only-binary :all: --require-hashes -r "$WORK/requirements.txt"
     install -m 644 "$HERE/havn_watch.py" "$WORK/watch/havn_watch.py"
     install -d -m 755 "$WORK/watch/bin"
-    # yt-dlp reads no configuration file of the host or the agent, and
-    # downloads 2 fragments at a time (upstream asks for 8; the last -N wins).
+    # yt-dlp, through the wrapper: it reads no configuration file of the host
+    # or the agent, and downloads 2 fragments at a time (upstream asks for 8).
     cat > "$WORK/watch/bin/yt-dlp" <<'SH'
 #!/bin/sh
 here="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
-exec "$here/../venv/bin/python" -I -m yt_dlp "$@" --ignore-config -N 2
+exec "$here/../venv/bin/python" -I "$here/../havn_watch.py" --yt-dlp "$@"
 SH
     cat > "$WORK/watch/bin/havn-watch" <<'SH'
 #!/bin/sh

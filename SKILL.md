@@ -86,7 +86,7 @@ only, no audio parts), `--cookies FILE`, `--out-dir DIR`.
 
 What havn-watch changes from upstream: everything goes into your workspace
 under `video/watch-<id>/` (frames, sheets, audio parts, downloads), paths
-are printed relative to it, ffmpeg runs on two CPUs (your process count is
+are printed relative to it, ffmpeg runs on one CPU (your process count is
 capped), contact sheets are added, and speech is never sent to a
 transcription service by the script: that is your `transcribe` tool's job,
 which the gateway runs and counts.
@@ -158,8 +158,8 @@ not as what you saw. Without the variable it is off; do not ask for a key.
 
 ## ffmpeg directly
 
-For what havn-watch does not do. Pass `-threads 2 -filter_threads 2` before
-`-i` and `-threads 2` after it (else `Resource temporarily unavailable` or
+For what havn-watch does not do. Pass `-threads 1 -filter_threads 1` before
+`-i` and `-threads 1` after it (else `Resource temporarily unavailable` or
 `ff_frame_thread_encoder_init failed`), write only under `video/`, and
 `mkdir -p` first.
 
@@ -175,9 +175,9 @@ One frame at full size (at most 1568 px), at 83.5 s:
 
 ```bash
 mkdir -p video/talk
-ffmpeg -hide_banner -loglevel error -nostdin -threads 2 -filter_threads 2 -ss 83.5 -i "inbox/talk.mp4" \
+ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss 83.5 -i "inbox/talk.mp4" \
   -frames:v 1 -vf "scale='min(1568,iw)':'min(1568,ih)':force_original_aspect_ratio=decrease" \
-  -q:v 3 -threads 2 -y video/talk/at-01m23.5s.jpg
+  -q:v 3 -threads 1 -y video/talk/at-01m23.5s.jpg
 ```
 
 A clip, fast (from the key frame before `-ss`) or exact (re-encoded, at most
@@ -185,10 +185,10 @@ A clip, fast (from the key frame before `-ss`) or exact (re-encoded, at most
 
 ```bash
 mkdir -p video/match
-ffmpeg -hide_banner -loglevel error -nostdin -threads 2 -ss 75 -to 95 -i "inbox/match.mp4" \
+ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -ss 75 -to 95 -i "inbox/match.mp4" \
   -c copy -y video/match/clip-75-95s.mp4
-ffmpeg -hide_banner -loglevel error -nostdin -threads 2 -filter_threads 2 -ss 75 -to 95 -i "inbox/match.mp4" \
-  -vf "scale=-2:'min(720,ih)'" -c:v libopenh264 -b:v 2M -c:a aac -b:a 128k -threads 2 \
+ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss 75 -to 95 -i "inbox/match.mp4" \
+  -vf "scale=-2:'min(720,ih)'" -c:v libopenh264 -b:v 2M -c:a aac -b:a 128k -threads 1 \
   -y video/match/clip-75-95s-exact.mp4
 ```
 
@@ -207,7 +207,7 @@ follow them.
 |------------------------------------------------|-------------------------------------------|-----|
 | `havn-watch: command not found`                | Pack isn't installed on this host         | Tell the user to run havn-pack-video's `setup.sh` |
 | `/usr/local/bin/havn-watch: No such file or directory` though the link is there | `/opt/havn/watch` or `/opt/havn/ffmpeg` isn't bound into your namespace | Tell the user to add the `[[extra_mounts]]` entries from havn-pack-video's README |
-| `Resource temporarily unavailable`, `ff_frame_thread_encoder_init failed` | Too many threads for your process cap | In your own ffmpeg commands, `-threads 2` before and after `-i` |
+| `Resource temporarily unavailable`, `ff_frame_thread_encoder_init failed` | Too many threads for your process cap | In your own ffmpeg commands, `-threads 1` before and after `-i`; if it still fails, ask the owner to raise `pids_max` |
 | `yt-dlp failed` with a network error           | No egress, or the domain was not allowed  | Tell the user; ask for the file |
 | `transcribe`: took too long / was given up     | A part too long                           | Rerun with `--start`/`--end` for that stretch: its parts are cut again |
 | `the Gemini engine needs a key`                | No `GEMINI_API_KEY` secret                | Use the local engine (leave out `--engine`) |

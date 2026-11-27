@@ -7,7 +7,7 @@
 #   runs, bills and audits;
 # - the Gemini engine reads its key only from the GEMINI_API_KEY variable (an
 #   agent secret), never from files, and runs only when asked for.
-# It also keeps ffmpeg to two CPUs, writes into the workspace, prints paths
+# It also keeps ffmpeg to one CPU, writes into the workspace, prints paths
 # relative to it, and tiles the frames into labelled contact sheets.
 from __future__ import annotations
 
@@ -29,8 +29,9 @@ FFMPEG_BIN: Path = PREFIX / "ffmpeg" / "bin"
 FONT: Path = PREFIX / "ffmpeg" / "fonts" / "DejaVuSansMono-Bold.ttf"
 VENV_BIN: Path = ROOT / "venv" / "bin"
 
-# ffmpeg starts threads per CPU it may use; the agent's process count is capped.
-CPUS: int = 2
+# ffmpeg starts threads per CPU it may use; the agent's process count is capped
+# (64 by default) and its runtime already holds many of them.
+CPUS: int = 1
 # Parts of sound for `transcribe`: short ones give finer times, long videos
 # take fewer calls (10 a minute for a user's agents, 80 s each at most).
 PART_SECONDS_SHORT: int = 60
@@ -207,6 +208,26 @@ def build_sheets(frames: list[tuple[str, str]], work: Path) -> list[tuple[Path, 
     return sheets
 
 
+class Progress(io.TextIOBase):
+    def __init__(self, target: Any) -> None:
+        self.target: Any = target
+        self.pending: str = ""
+
+    def write(self, text: str) -> int:
+        self.pending += text
+        *lines, self.pending = self.pending.split("\n")
+        for line in lines:
+            if MARKER not in line:
+                self.target.write(line + "\n")
+        return len(text)
+
+    def flush(self) -> None:
+        if self.pending and MARKER not in self.pending:
+            self.target.write(self.pending)
+        self.pending = ""
+        self.target.flush()
+
+
 def relative(path: Path, base: Path) -> str:
     try:
         return str(path.resolve().relative_to(base))
@@ -227,6 +248,7 @@ def rewrite(report: str, base: Path) -> str:
             line = "- **Transcript:** not made yet: transcribe the audio parts below with the `transcribe` tool"
         if line == "_Failed._" and PARTS:
             line = "_Not made yet: see **Audio for transcribe** below._"
+        line = line.replace("with the Read tool to view the image", "with `view_image` to see it")
         match: re.Match[str] | None = FRAME_LINE.match(line)
         if match:
             frames.append((match.group(1), match.group(2)))
@@ -279,7 +301,8 @@ def main() -> int:
     sys.argv = ["watch", *args]
     captured: io.StringIO = io.StringIO()
     code: int = 0
-    with contextlib.redirect_stdout(captured):
+    progress: Progress = Progress(sys.stderr)
+    with contextlib.redirect_stdout(captured), contextlib.redirect_stderr(progress):
         try:
             code = watch.main()
         except SystemExit as exc:
@@ -289,6 +312,7 @@ def main() -> int:
         except (watch.ConfigError, OSError) as exc:
             print(f"havn-watch: {exc}", file=sys.stderr)
             code = 1
+    progress.flush()
     sys.stdout.write(rewrite(captured.getvalue(), Path.cwd().resolve()))
     return 0 if PARTS else code
 

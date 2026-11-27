@@ -47,8 +47,9 @@ directories.
     `GEMINI_API_KEY`, which the owner sets as an agent secret; the key is
     never read from files. It sends the video to Google.
   - It also writes everything into the agent's workspace (`video/`), prints
-    paths relative to it (for `view_image`), keeps ffmpeg on two CPUs (an
-    agent's process count is capped, and ffmpeg starts a thread per CPU),
+    paths relative to it (for `view_image`), keeps ffmpeg on one CPU (an
+    agent's process count is capped, its runtime holds many of them, and
+    ffmpeg starts threads per CPU),
     and tiles the frames into contact sheets (havn shows at most 10 images
     in a request by default, so 16 frames to an image go further).
 - **Not** a havn-core change. The gateway still hands a video sent in a chat
@@ -114,9 +115,13 @@ mode = "ro"
 With other packs (havn-pack-browser), add these entries next to theirs.
 Nothing else is needed: no tmpfs, no seccomp allowance.
 
-The agent's default limits are enough for ordinary videos:
-`resource_limits.memory_mb` 512 and `pids_max` 64 (why havn-watch keeps
-ffmpeg on two CPUs). A long video or a download takes longer than the shell
+Raise the agent's `resource_limits.pids_max` from its default 64 to 128 (as
+for the browser pack's memory limit: through its team role, or its own
+`config.policy` override on a single-user gateway). An idle agent's runtime
+already holds about 50 of the 64, and ffmpeg starts threads per CPU, which
+then fails with `Resource temporarily unavailable`; havn-watch keeps ffmpeg
+on one CPU (about 6 threads), which fits even in 64, but with little room.
+The default `memory_mb` 512 is enough for ordinary videos. A long video or a download takes longer than the shell
 tool's default 300 s: the skill runs such jobs in the background, within
 the policy's `shell.max_timeout_seconds` (1800).
 

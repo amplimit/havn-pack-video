@@ -79,30 +79,40 @@ def prepare_environment() -> None:
     os.environ["WATCH_ENGINE"] = "local"
 
 
+def options_of(args: list[str]) -> list[str]:
+    return args[:args.index("--")] if "--" in args else args
+
+
 def option(args: list[str], name: str) -> str | None:
-    for i, arg in enumerate(args):
-        if arg == name and i + 1 < len(args):
-            return args[i + 1]
-        if arg.startswith(name + "="):
-            return arg.split("=", 1)[1]
-    return None
+    head: list[str] = options_of(args)
+    found: str | None = None
+    for i, arg in enumerate(head):
+        if arg == name and i + 1 < len(head):
+            found = head[i + 1]
+        elif arg.startswith(name + "="):
+            found = arg.split("=", 1)[1]
+    return found
 
 
-def without(args: list[str], name: str) -> list[str]:
+def with_value(args: list[str], name: str, value: str) -> list[str]:
+    head: list[str] = options_of(args)
     out: list[str] = []
-    skip: bool = False
-    for arg in args:
-        if skip:
-            skip = False
-        elif arg == name:
-            skip = True
-        elif not arg.startswith(name + "="):
-            out.append(arg)
-    return out
+    i: int = 0
+    while i < len(head):
+        arg: str = head[i]
+        if arg == name and i + 1 < len(head):
+            out += [name, value]
+            i += 2
+            continue
+        if arg.startswith(name + "="):
+            arg = f"{name}={value}"
+        out.append(arg)
+        i += 1
+    return out + args[len(head):]
 
 
 def checked_arguments(args: list[str]) -> list[str]:
-    for arg in args:
+    for arg in options_of(args):
         name: str = arg.split("=", 1)[0]
         if name in REFUSED:
             fail(f"{name} is not available here: speech goes to the transcribe tool, "
@@ -111,11 +121,12 @@ def checked_arguments(args: list[str]) -> list[str]:
     if engine == "gemini" and not os.environ.get("GEMINI_API_KEY", "").strip():
         fail("the Gemini engine needs a key: the agent's owner can set one as an agent secret "
              "with the variable GEMINI_API_KEY. Without it, leave out --engine.")
-    if engine != "gemini":
-        args = [*without(args, "--engine"), "--engine", "local"]
+    chosen: str = "gemini" if engine == "gemini" else "local"
+    # Put first, before any `--`; every --engine the agent gave says the same.
+    forced: list[str] = ["--engine", chosen]
     if option(args, "--out-dir") is None:
-        args = [*args, "--out-dir", "video"]
-    return args
+        forced += ["--out-dir", "video"]
+    return [*forced, *with_value(args, "--engine", chosen)]
 
 
 def run(command: list[str]) -> subprocess.CompletedProcess[str]:

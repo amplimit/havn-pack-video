@@ -158,13 +158,16 @@ switch() {
         current="$name-previous"
     fi
     if [ "$current" != "$version" ]; then
+        # Recorded first: if the run stops before the rename, the link still
+        # points at what the record names, and a rerun keeps both.
+        if [ -n "$current" ]; then
+            previous="$current"
+            echo "$previous" > "$record.new"
+            mv -T "$record.new" "$record"
+        fi
         ln -sfn "$version" "$PREFIX/.$name.link"
         mv -T "$PREFIX/.$name.link" "$link"
         log "switched $link → $version"
-        if [ -n "$current" ]; then
-            previous="$current"
-            echo "$previous" > "$record"
-        fi
     fi
     for dir in "$PREFIX/$name"-*; do
         [ -e "$dir" ] || continue
@@ -175,8 +178,48 @@ switch() {
     done
 }
 
+# The version directory the link $PREFIX/$1 points at, and the one its
+# record keeps; empty when there is none.
+current_of() {
+    if [ -L "$PREFIX/$1" ]; then readlink "$PREFIX/$1"; fi
+}
+
+previous_of() {
+    if [ -f "$PREFIX/.$1.previous" ]; then cat "$PREFIX/.$1.previous"; fi
+}
+
+# A name in $PREFIX to install version $2 of $1 under: $2 itself, unless a
+# directory of that name is there. One that agents may use (the link's or
+# the record's) is never removed: the new copy gets a name of its own. Any
+# other is an incomplete leftover, removed.
+free_name() {
+    local name="$1" version="$2" n=2
+    if [ -e "$PREFIX/$version" ]; then
+        case "$version" in
+            "$(current_of "$name")"|"$(previous_of "$name")")
+                while [ -e "$PREFIX/$version.$n" ]; do n=$((n + 1)); done
+                version="$version.$n"
+                ;;
+            *) rm -rf "${PREFIX:?}/$version" ;;
+        esac
+    fi
+    echo "$version"
+}
+
+# Whether $1 holds the ffmpeg build $2 and it runs.
+ffmpeg_complete() {
+    [ -f "$1/BUILD" ] && [ "$(cat "$1/BUILD")" = "$2" ] \
+        && "$1/bin/ffmpeg" -hide_banner -version >/dev/null 2>&1
+}
+
+# Whether $1 holds the /watch build $2 and its yt-dlp runs.
+watch_complete() {
+    [ -f "$1/BUILD" ] && [ "$(cat "$1/BUILD")" = "$2" ] \
+        && "$1/bin/yt-dlp" --version >/dev/null 2>&1
+}
+
 install_ffmpeg() {
-    local found target sha archive build version
+    local found target sha archive build version dir
     found="$(detect_target)"
     target="${found% *}"
     sha="${found#* }"
@@ -184,12 +227,13 @@ install_ffmpeg() {
     build="$archive $sha font $(file_sha "$HERE/fonts/DejaVuSansMono-Bold.ttf") gpl $(file_sha "$HERE/licenses/GPL-3.0.txt")"
     version="ffmpeg-${FFMPEG_BUILD#ffmpeg-}-$target-$(key_of "$build")"
 
-    if [ -f "$PREFIX/$version/BUILD" ] && [ "$(cat "$PREFIX/$version/BUILD")" = "$build" ] \
-        && "$PREFIX/$version/bin/ffmpeg" -hide_banner -version >/dev/null 2>&1; then
-        log "ffmpeg ${FFMPEG_BUILD#ffmpeg-} ($target, LGPL) already installed as $PREFIX/$version — skipping download"
-        switch ffmpeg "$version"
-        return
-    fi
+    for dir in "$(current_of ffmpeg)" "$version"; do
+        if [ -n "$dir" ] && ffmpeg_complete "$PREFIX/$dir" "$build"; then
+            log "ffmpeg ${FFMPEG_BUILD#ffmpeg-} ($target, LGPL) already installed as $PREFIX/$dir — skipping download"
+            switch ffmpeg "$dir"
+            return
+        fi
+    done
 
     require_space
     WORK="$(mktemp -d "$PREFIX/.ffmpeg.XXXXXX")"
@@ -212,7 +256,7 @@ install_ffmpeg() {
     chmod 755 "$WORK/ffmpeg" "$WORK/ffmpeg/bin" "$WORK/ffmpeg/bin/ffmpeg" "$WORK/ffmpeg/bin/ffprobe"
     chmod 644 "$WORK/ffmpeg/LICENSE.txt" "$WORK/ffmpeg/BUILD"
 
-    rm -rf "${PREFIX:?}/$version"
+    version="$(free_name ffmpeg "$version")"
     mv "$WORK/ffmpeg" "$PREFIX/$version"
     cleanup
     log "ffmpeg ${FFMPEG_BUILD#ffmpeg-} ($target, LGPL) installed as $PREFIX/$version"
@@ -220,16 +264,17 @@ install_ffmpeg() {
 }
 
 install_watch() {
-    local build version
+    local build version dir
     build="claude-video $WATCH_COMMIT $WATCH_SHA256 yt-dlp $YTDLP_VERSION $YTDLP_SHA256 yt-dlp-ejs $EJS_VERSION $EJS_SHA256 wrapper $(file_sha "$HERE/havn_watch.py")"
     version="watch-${WATCH_COMMIT:0:12}-$(key_of "$build")"
 
-    if [ -f "$PREFIX/$version/BUILD" ] && [ "$(cat "$PREFIX/$version/BUILD")" = "$build" ] \
-        && "$PREFIX/$version/bin/yt-dlp" --version >/dev/null 2>&1; then
-        log "/watch ${WATCH_COMMIT:0:12} and yt-dlp $YTDLP_VERSION already installed as $PREFIX/$version — skipping download"
-        switch watch "$version"
-        return
-    fi
+    for dir in "$(current_of watch)" "$version"; do
+        if [ -n "$dir" ] && watch_complete "$PREFIX/$dir" "$build"; then
+            log "/watch ${WATCH_COMMIT:0:12} and yt-dlp $YTDLP_VERSION already installed as $PREFIX/$dir — skipping download"
+            switch watch "$dir"
+            return
+        fi
+    done
 
     require_space
     WORK="$(mktemp -d "$PREFIX/.watch.XXXXXX")"
@@ -272,7 +317,7 @@ SH
     echo "$build" > "$WORK/watch/BUILD"
     chmod -R u=rwX,go=rX "$WORK/watch"
 
-    rm -rf "${PREFIX:?}/$version"
+    version="$(free_name watch "$version")"
     mv "$WORK/watch" "$PREFIX/$version"
     cleanup
     log "/watch ${WATCH_COMMIT:0:12} (claude-video 0.3.2) and yt-dlp $YTDLP_VERSION installed as $PREFIX/$version"
@@ -350,7 +395,7 @@ main() {
     require_python
     mkdir -p "$PREFIX"
     # What an interrupted earlier run left.
-    rm -rf "$PREFIX"/.ffmpeg.?????? "$PREFIX"/.watch.?????? "$PREFIX"/.ffmpeg.link "$PREFIX"/.watch.link "$PREFIX"/.havn-watch.link
+    rm -rf "$PREFIX"/.ffmpeg.?????? "$PREFIX"/.watch.?????? "$PREFIX"/.ffmpeg.link "$PREFIX"/.watch.link "$PREFIX"/.havn-watch.link "$PREFIX"/.ffmpeg.previous.new "$PREFIX"/.watch.previous.new
     log "havn-pack-video setup → $PREFIX"
     install_ffmpeg
     install_watch

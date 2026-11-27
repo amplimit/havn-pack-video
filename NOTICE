@@ -52,6 +52,7 @@ https://github.com/dejavu-fonts/dejavu-fonts
 FFmpeg 9.0.2 (n9.0.2-39-g7adfbe40dc), the LGPL build of FFmpeg-Builds
 release autobuild-2026-10-31-12-59, downloaded by setup.sh into
 /opt/havn/ffmpeg; not shipped in this repository. GNU Lesser General Public
-License, version 3 or later; the licence text is installed as
-/opt/havn/ffmpeg/LICENSE.txt. Source: https://git.ffmpeg.org/ffmpeg.git and
+License, version 3 or later; its text is installed as
+/opt/havn/ffmpeg/LICENSE.txt, and the GPL v3 text it refers to (licenses/GPL-3.0.txt
+here) as /opt/havn/ffmpeg/COPYING.GPLv3. Source: https://git.ffmpeg.org/ffmpeg.git and
 https://github.com/FFmpeg-Builds/FFmpeg-Builds.

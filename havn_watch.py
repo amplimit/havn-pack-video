@@ -6,11 +6,14 @@
 #   is cut into parts for the agent's own `transcribe` tool, which the gateway
 #   runs, bills and audits;
 # - the Gemini engine reads its key only from the GEMINI_API_KEY variable (an
-#   agent secret), never from files, and runs only when asked for.
-# It also keeps ffmpeg to one CPU, writes into the workspace, prints paths
-# relative to it, and tiles the frames into labelled contact sheets.
+#   agent secret), never from files, and runs only with --engine gemini.
+# It also reads no ~/.config/watch/.env, takes no abbreviated options, runs
+# yt-dlp and ffmpeg from the pack (one CPU for ffmpeg), writes into the
+# workspace, prints paths relative to it, and tiles the frames into labelled
+# contact sheets.
 from __future__ import annotations
 
+import argparse
 import contextlib
 import io
 import math
@@ -19,6 +22,7 @@ import re
 import shutil
 import subprocess
 import sys
+import types
 from pathlib import Path
 from typing import Any, Callable, NoReturn
 
@@ -27,7 +31,7 @@ SCRIPTS: Path = ROOT / "upstream" / "skills" / "watch" / "scripts"
 PREFIX: Path = ROOT.parent
 FFMPEG_BIN: Path = PREFIX / "ffmpeg" / "bin"
 FONT: Path = PREFIX / "ffmpeg" / "fonts" / "DejaVuSansMono-Bold.ttf"
-VENV_BIN: Path = ROOT / "venv" / "bin"
+LAUNCHERS: Path = ROOT / "bin"
 
 # ffmpeg starts threads per CPU it may use; the agent's process count is capped
 # (64 by default) and its runtime already holds many of them.
@@ -49,6 +53,12 @@ FRAME_LINE: re.Pattern[str] = re.compile(r"^- `([^`]+)` \(t=([0-9:]+)")
 PARTS: list[tuple[Path, float]] = []
 
 
+class StrictParser(argparse.ArgumentParser):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        kwargs["allow_abbrev"] = False
+        super().__init__(*args, **kwargs)
+
+
 def fail(message: str) -> NoReturn:
     print(f"havn-watch: {message}", file=sys.stderr)
     raise SystemExit(2)
@@ -60,7 +70,7 @@ def limit_cpus() -> None:
 
 
 def prepare_environment() -> None:
-    os.environ["PATH"] = os.pathsep.join([str(VENV_BIN), str(FFMPEG_BIN), os.environ.get("PATH", "")])
+    os.environ["PATH"] = os.pathsep.join([str(LAUNCHERS), str(FFMPEG_BIN), os.environ.get("PATH", "")])
     os.environ["WATCH_WHISPER_BACKEND"] = "auto"
     os.environ["WATCH_ENGINE"] = "local"
 
@@ -74,6 +84,19 @@ def option(args: list[str], name: str) -> str | None:
     return None
 
 
+def without(args: list[str], name: str) -> list[str]:
+    out: list[str] = []
+    skip: bool = False
+    for arg in args:
+        if skip:
+            skip = False
+        elif arg == name:
+            skip = True
+        elif not arg.startswith(name + "="):
+            out.append(arg)
+    return out
+
+
 def checked_arguments(args: list[str]) -> list[str]:
     for arg in args:
         name: str = arg.split("=", 1)[0]
@@ -84,6 +107,8 @@ def checked_arguments(args: list[str]) -> list[str]:
     if engine == "gemini" and not os.environ.get("GEMINI_API_KEY", "").strip():
         fail("the Gemini engine needs a key: the agent's owner can set one as an agent secret "
              "with the variable GEMINI_API_KEY. Without it, leave out --engine.")
+    if engine != "gemini":
+        args = [*without(args, "--engine"), "--engine", "local"]
     if option(args, "--out-dir") is None:
         args = [*args, "--out-dir", "video"]
     return args
@@ -292,9 +317,12 @@ def main() -> int:
     prepare_environment()
     args: list[str] = checked_arguments(sys.argv[1:])
     sys.path.insert(0, str(SCRIPTS))
+    import config
+    config.CONFIG_FILE = Path(os.devnull)
     import watch
     from runtime import configure_stdio
     configure_stdio()
+    watch.argparse = types.SimpleNamespace(**{**vars(argparse), "ArgumentParser": StrictParser})
     watch.load_api_key = no_cloud_key
     watch.load_gemini_key = gemini_key
     watch.transcribe_video = prepare_audio(args)

@@ -33,7 +33,8 @@ directories.
   SHA-256, no distro package), and in `/opt/havn/watch` the `/watch`
   scripts at commit `03ceb42` (release 0.3.2, checked by SHA-256), a Python
   venv with pinned yt-dlp and yt-dlp-ejs wheels (installed by hash), and
-  `havn-watch`.
+  `havn-watch`. Each version goes into a directory of its own, and an
+  upgrade switches to it in one rename (see Upgrading).
 - **`havn-watch`** (`havn_watch.py`) runs upstream's `watch.py` as it is.
   It only sets the environment and replaces two functions at run time:
   - **No API keys in the sandbox.** Upstream's own speech backends (Groq,
@@ -46,10 +47,13 @@ directories.
     `--engine gemini` and only when the agent's shell environment has
     `GEMINI_API_KEY`, which the owner sets as an agent secret; the key is
     never read from files. It sends the video to Google.
-  - It also writes everything into the agent's workspace (`video/`), prints
-    paths relative to it (for `view_image`), keeps ffmpeg on one CPU (an
-    agent's process count is capped, its runtime holds many of them, and
-    ffmpeg starts threads per CPU),
+  - Upstream's options cannot be abbreviated (so `--eng gemini` is not
+    `--engine gemini`), and its `~/.config/watch/.env` is not read.
+  - It runs the pack's ffmpeg and yt-dlp (yt-dlp with no configuration
+    files and 2 fragments at a time instead of 8), keeps ffmpeg on one CPU
+    (an agent's process count is capped, its runtime holds many of them,
+    and ffmpeg starts threads per CPU), writes everything into the agent's
+    workspace (`video/`), prints paths relative to it (for `view_image`),
     and tiles the frames into contact sheets (havn shows at most 10 images
     in a request by default, so 16 frames to an image go further).
 - **Not** a havn-core change. The gateway still hands a video sent in a chat
@@ -86,15 +90,22 @@ sudo ./setup.sh                    # installs to /opt/havn, idempotent
 It downloads the pinned ffmpeg build (about 140 MB) and the `/watch`
 tarball over HTTPS and checks their SHA-256 before using them, makes the
 venv and installs the two wheels with `pip --require-hashes`, and links
-`/usr/local/bin/ffmpeg`, `ffprobe` and `havn-watch` to the install (a file
-of that name that is not a link is left alone). Re-running it keeps what
-matches the pins and replaces the rest. `HAVN_PACK_PREFIX` installs under
+`/usr/local/bin/havn-watch` to the install, unless a file of that name is
+there that is not this pack's link. ffmpeg and ffprobe are not put on the
+host's PATH: havn-watch and the skill use them in `/opt/havn/ffmpeg/bin`,
+and an ffmpeg the host has stays the one on PATH. Re-running it keeps what
+matches the pins and installs the rest. `HAVN_PACK_PREFIX` installs under
 another directory instead of `/opt/havn`.
+
+GitHub makes the `/watch` tarball from the repository when it is asked
+for, and has changed such archives' bytes before. If it does again, the
+SHA-256 no longer matches and `setup.sh` stops before installing anything,
+until a pack release pins the new hash.
 
 ### 2. Make the install visible to agents
 
-Agents see the host's `/usr` read-only, so the links in `/usr/local/bin`
-are on their PATH, but `/opt/havn` is not bound into their namespace unless
+Agents see the host's `/usr` read-only, so the `havn-watch` link in
+`/usr/local/bin` is on their PATH, but `/opt/havn` is not bound into their namespace unless
 the gateway config says so. Add this to your havn gateway config
 (`$HAVN_CONFIG`, else `~/.config/havn/config.toml` of the user the gateway
 runs as: `/root/.config/havn/config.toml` under havn's systemd unit) and
@@ -118,10 +129,11 @@ Nothing else is needed: no tmpfs, no seccomp allowance.
 Raise the agent's `resource_limits.pids_max` from its default 64 to 128 (as
 for the browser pack's memory limit: through its team role, or its own
 `config.policy` override on a single-user gateway). An idle agent's runtime
-already holds about 50 of the 64, and ffmpeg starts threads per CPU, which
-then fails with `Resource temporarily unavailable`; havn-watch keeps ffmpeg
-on one CPU (about 6 threads), which fits even in 64, but with little room.
-The default `memory_mb` 512 is enough for ordinary videos. A long video or a download takes longer than the shell
+already holds about 53 of the 64. havn-watch keeps ffmpeg on one CPU (about
+6 threads), which fits in what is left of 64 for a local file, but a URL
+also runs yt-dlp and its downloads alongside: those need the 128, or fail
+with `Resource temporarily unavailable`. The default `memory_mb` 512 is
+enough for ordinary videos. A long video or a download takes longer than the shell
 tool's default 300 s: the skill runs such jobs in the background, within
 the policy's `shell.max_timeout_seconds` (1800).
 
@@ -197,19 +209,23 @@ If the agent says it cannot work with video, check:
 ## Upgrading
 
 Run a newer `setup.sh` from this repo, then restart the agents that use the
-pack: one running during the upgrade keeps the old directories bound until
-its next start. `havn update` (from Havn 0.2.17) lists the pack (as
+pack. Each version is installed whole into a directory of its own
+(`/opt/havn/ffmpeg-<version>`, `/opt/havn/watch-<version>`), pip included,
+before `/opt/havn/ffmpeg` and `/opt/havn/watch`, which are links, are
+switched to it in one rename. An agent binds the directory a link points to
+when it starts, so one that keeps running goes on with the version it
+started with: `setup.sh` keeps the version it switched away from and
+removes older ones, so an agent still running from two upgrades back loses
+its files. `havn update` (from Havn 0.2.17) lists the pack (as
 `havn-pack-video`, by its `/opt/havn/ffmpeg`) but does not update it. Sites
 change and break older yt-dlp releases; a pack release pins a newer one.
 
 ## Uninstall
 
 ```bash
-sudo rm -rf /opt/havn/ffmpeg /opt/havn/watch
-# the links, if they are this pack's
-for b in ffmpeg ffprobe havn-watch; do
-  case "$(readlink /usr/local/bin/$b)" in /opt/havn/*) sudo rm /usr/local/bin/$b ;; esac
-done
+sudo rm -rf /opt/havn/ffmpeg /opt/havn/ffmpeg-* /opt/havn/watch /opt/havn/watch-* /opt/havn/.ffmpeg.previous /opt/havn/.watch.previous
+# the havn-watch link, if it is this pack's
+case "$(readlink /usr/local/bin/havn-watch)" in /opt/havn/*) sudo rm /usr/local/bin/havn-watch ;; esac
 ```
 
 Then remove the two `[[extra_mounts]]` entries from the gateway config and
@@ -226,6 +242,7 @@ SKILL.md            content injected into the agent's system prompt — teaches
 havn_watch.py       the havn-watch wrapper around the pinned /watch scripts
 setup.sh            host-side installer for ffmpeg, /watch, its venv, havn-watch
 fonts/              DejaVu Sans Mono Bold and its licence, for frame labels
+licenses/           the GPL v3 text, which the LGPL v3 of ffmpeg refers to
 README.md           you're reading it
 NOTICE              third-party notices
 LICENSE             Apache-2.0
@@ -280,9 +297,11 @@ BtbN/FFmpeg-Builds; its build scripts are MIT), release
 
 It is configured with `--enable-version3` and without `--enable-gpl` or
 `--enable-nonfree`, so the binaries are under the **GNU Lesser General
-Public License, version 3 or later**; `ffmpeg -L` prints the notice and the
+Public License, version 3 or later**; `ffmpeg -L` prints the notice, the
 build's `LICENSE.txt` (the LGPL v3 text) is installed at
-`/opt/havn/ffmpeg/LICENSE.txt`. The libraries linked into it are each under
+`/opt/havn/ffmpeg/LICENSE.txt`, and the GPL v3 text it builds on (which the
+build does not carry; shipped here in `licenses/GPL-3.0.txt`) at
+`/opt/havn/ffmpeg/COPYING.GPLv3`. The libraries linked into it are each under
 their own licence, all of them compatible with the LGPL (`ffmpeg -buildconf`
 lists them; FFmpeg-Builds' `scripts.d` names each one's source). The
 corresponding source is FFmpeg's git at that commit
@@ -297,6 +316,11 @@ FFmpeg-Builds keeps each month's last build for two years, so the pinned URL
 stays; its Linux builds link every library in statically except glibc.
 
 If you redistribute these binaries yourself (say, in a machine image), the
-LGPL's terms apply to you: pass on the licence and the notice, and offer the
-corresponding source. Codec patents (H.264, HEVC, AAC) may apply in some
+LGPL's terms apply to you: pass on the licence texts and the notice, and
+offer the corresponding source. The libraries linked into the binaries
+(OpenSSL, dav1d, libvpx, Opus, LAME, OpenH264, FreeType, HarfBuzz and the
+others `ffmpeg -buildconf` lists) have notices of their own, which many of
+their licences (BSD, MIT, Apache-2.0) require to go with binaries; the
+build does not bundle them, so take them from each library's source, as
+FFmpeg-Builds' `scripts.d` names it. Codec patents (H.264, HEVC, AAC) may apply in some
 countries whatever the copyright licence; that is the operator's call.

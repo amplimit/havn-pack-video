@@ -1,0 +1,58 @@
+havn-pack-video
+Copyright 2026 Amplimit
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This pack installs, or ships, the following third-party software.
+
+------------------------------------------------------------------------
+/watch skill (claude-video), installed by setup.sh at commit
+03ceb42f7fa2c4439aca01752118044baabffb8f under /opt/havn/watch/upstream,
+unchanged; havn_watch.py runs it.
+https://github.com/bradautomates/claude-video
+
+MIT License
+
+Copyright (c) 2026 Bradley Bonanno
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+------------------------------------------------------------------------
+yt-dlp 2026.10.26 (The Unlicense) and yt-dlp-ejs 0.8.0 (Unlicense AND MIT
+AND ISC), installed by setup.sh from PyPI into /opt/havn/watch/venv; each
+wheel carries its licence files.
+https://github.com/yt-dlp/yt-dlp
+https://github.com/yt-dlp/ejs
+
+------------------------------------------------------------------------
+DejaVu Sans Mono Bold, DejaVu fonts 2.37, shipped in fonts/ and installed
+under /opt/havn/ffmpeg/fonts. Fonts are (c) Bitstream (Bitstream Vera
+license); glyphs imported from Arev fonts are (c) Tavmjong Bah; DejaVu
+changes are in the public domain. The full licence is in
+fonts/LICENSE-DejaVu.txt.
+https://github.com/dejavu-fonts/dejavu-fonts
+
+------------------------------------------------------------------------
+FFmpeg 9.0.2 (n9.0.2-39-g7adfbe40dc), the LGPL build of FFmpeg-Builds
+release autobuild-2026-10-31-12-59, downloaded by setup.sh into
+/opt/havn/ffmpeg; not shipped in this repository. GNU Lesser General Public
+License, version 3 or later; its text is installed as
+/opt/havn/ffmpeg/LICENSE.txt, and the GPL v3 text it refers to (licenses/GPL-3.0.txt
+here) as /opt/havn/ffmpeg/COPYING.GPLv3. Source: https://git.ffmpeg.org/ffmpeg.git and
+https://github.com/FFmpeg-Builds/FFmpeg-Builds.

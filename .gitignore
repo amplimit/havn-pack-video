@@ -1,0 +1,17 @@
+# Local test artifacts (someone trying SKILL.md commands from this dir)
+video/
+inbox/
+__pycache__/
+
+# Runtime / secrets
+.env
+*.db
+
+# Claude Code
+.claude/
+
+# OS / editor noise
+.DS_Store
+*.swp
+.vscode/
+.idea/

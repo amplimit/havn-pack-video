@@ -59,7 +59,7 @@ arms' web search should be off in a rerun.
   removed its frame directory (as the skill said), every earlier view read
   "not shown: it is not there any more". B took this for failed views,
   threw away what it had seen and started again: on g3 it reached the
-  100-tool-round limit with no answer. amplimit/Havn#354 tracks this.
+  100-tool-round limit with no answer. Fixed for Havn 0.2.17 (amplimit/Havn#356).
 - **A provider that drops images.** In a separate probe of all 57 of
   OpenRouter's endpoints for the deepseek model, one (OpenInference) took
   the request and left the image out without an error (480 prompt tokens
@@ -117,7 +117,9 @@ not saved, and the run is graded again next time.
 Two departures from issue #2: the judge scores every video, the generated
 ones too, against the references (not by exact matching); and the real
 videos' references were made independently (subtitles, another family's
-transcript, frames), not taken from A's answers, so they do not favour A. Each run's answer, tool calls, time and cost are in `results/`,
+transcript, frames), not taken from A's answers, so they do not favour A.
+
+Each run's answer, tool calls, time and cost are in `results/`,
 the scores in `graded/`.
 
 ## Running it

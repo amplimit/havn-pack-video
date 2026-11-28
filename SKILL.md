@@ -71,8 +71,8 @@ needed:
 
 - **Read text only from a large single frame.** Code, numbers, captions and
   labels: one frame at the source's full width, at most 1568 px (with
-  havn-watch, `--timestamps T --resolution W` with W the video's width, or
-  1024 for a larger video; or one ffmpeg frame at full size, below). In a
+  havn-watch, `--timestamps T --resolution W` with W the video's width,
+  1568 at most; or one ffmpeg frame at full size, below). In a
   contact sheet, or a tile you make of small frames, text is too small to
   read, and models given one wrote down text that is not in the video. If
   you cannot read it, say so; never fill in text you did not read.

@@ -58,7 +58,7 @@ def main() -> None:
         if answered(answer):
             try:
                 scores = judge(key, item["questions"], answer, tolerance)
-            except (ValueError, KeyError, OSError) as e:
+            except (ValueError, KeyError, TypeError, OSError) as e:
                 print(f"{result.stem}: not graded ({e})", flush=True)
                 continue
         else:

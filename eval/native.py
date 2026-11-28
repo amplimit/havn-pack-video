@@ -61,7 +61,8 @@ def main() -> None:
             continue
         result: dict[str, Any] = ask(videos / item["video"], prompt(item["questions"]))
         result.update({"arm": "A", "video": item["video"], "model": MODEL, "bytes": (videos / item["video"]).stat().st_size})
-        target.write_text(json.dumps(result, indent=1))
+        if "error" not in result:
+            target.write_text(json.dumps(result, indent=1))
         print(f"A {item['video']}: {result['seconds']}s cost={result.get('cost')} {result.get('error', '')}", flush=True)
 
 

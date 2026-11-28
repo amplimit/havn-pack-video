@@ -1,6 +1,6 @@
 ---
 name: video
-description: Watch a video (a file in the workspace, a clip sent in a chat, or a URL) with havn-watch, the /watch skill of claude-video run in Havn's sandbox. It gives timestamped frames and contact sheets to look at with view_image, captions, and the sound cut into parts for the transcribe tool; it can also cut clips with ffmpeg. Use when a task needs what is said or shown in a video.
+description: Watch a video (a file in the workspace, a clip sent in a chat, or a URL). First the video in the message or the watch_video tool (Havn 0.2.17 and later), when there; then havn-watch, the /watch skill of claude-video run in Havn's sandbox. It gives timestamped frames and contact sheets to look at with view_image, captions, and the sound cut into parts for the transcribe tool; it can also cut clips with ffmpeg. Use when a task needs what is said or shown in a video.
 triggers: [video, clip, movie, recording, screencast, youtube, mp4, mov, mkv, webm, watch, frames]
 metadata:
   havn:
@@ -14,8 +14,8 @@ metadata:
 
 # Video (havn-pack-video)
 
-Most models cannot watch a video: they take still images, and the gateway
-gives you a video as a file. `havn-watch`, run through your `shell` tool,
+Most models cannot watch a video: they take still images, and unless the
+gateway shows it to your model (below), you get a video as a file. `havn-watch`, run through your `shell` tool,
 takes one apart for you: it is the `/watch` skill of
 [claude-video](https://github.com/bradautomates/claude-video) (MIT),
 pinned, run in Havn's sandbox. It prints a report with the video's facts,
@@ -32,14 +32,19 @@ pack's evaluation: 99% of 58 questions, against 68 to 72% through this
 pipeline, at a fraction of the cost and time). Before taking a video apart:
 
 - **A video sent in the chat may already be in your message**, when your
-  model takes video: answer from it. In later turns it is a line instead
-  ("A video was sent here, ...; later turns do not show it again").
+  model takes video: answer from it. Otherwise, and in the turns after the
+  one it came with (a question sent as its own message is one), it is a
+  line ("A video was sent here, ..." or "The video ... is not shown: ..."):
+  ask `watch_video` about the `inbox/` path the line names.
 - **`watch_video`**, when you have it: give it the video's path in your
   workspace and a question; the gateway's video model watches the whole
-  video and answers. One call per question, counted by the video's length
-  (about 110 tokens a second); ask a follow-up as another call. A video over
-  its size limit: cut the part the question is about with ffmpeg (below)
-  and ask about the clip.
+  video and answers. The video goes to the provider your owner set up for
+  `[video]`. One call per question, counted by the video's length (about
+  110 tokens a second); ask a follow-up as another call. Its `start` and
+  `end` tell the model which part to look at, but the whole video is still
+  sent and paid for. A video over its size limit, or too long for its 80 s:
+  cut the part the question is about with ffmpeg (below) and ask about the
+  clip.
 - **This pack** for what those do not give: frames or a clip to send, a
   check of a detail you want to see yourself, or when neither is there or
   `watch_video` says it cannot (a format it does not take: convert it with
@@ -48,7 +53,7 @@ pipeline, at a fraction of the cost and time). Before taking a video apart:
 Relay what `watch_video` says as the video model's answer, and say when you
 checked it yourself.
 
-## This skill and upstream's
+## The pack
 
 This skill has what you need from upstream's. Its own is at
 `/opt/havn/watch/upstream/skills/watch/SKILL.md`, outside your workspace,

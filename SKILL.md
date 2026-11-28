@@ -14,8 +14,8 @@ metadata:
 
 # Video (havn-pack-video)
 
-You cannot watch a video: models take still images, and the gateway gives
-you a video only as a file. `havn-watch`, run through your `shell` tool,
+Most models cannot watch a video: they take still images, and the gateway
+gives you a video as a file. `havn-watch`, run through your `shell` tool,
 takes one apart for you: it is the `/watch` skill of
 [claude-video](https://github.com/bradautomates/claude-video) (MIT),
 pinned, run in Havn's sandbox. It prints a report with the video's facts,
@@ -23,6 +23,32 @@ timestamped frames, contact sheets of them, the captions when the video has
 them, and otherwise its sound cut into parts for your `transcribe` tool.
 You look at the frames with `view_image` and answer from what you saw and
 heard.
+
+## First: let Havn show it
+
+Havn 0.2.17 and later can have a model that takes video watch it, sound
+included, and that answers far better than frames and a transcript (the
+pack's evaluation: 99% of 58 questions, against 68 to 72% through this
+pipeline, at a fraction of the cost and time). Before taking a video apart:
+
+- **A video sent in the chat may already be in your message**, when your
+  model takes video: answer from it. In later turns it is a line instead
+  ("A video was sent here, ...; later turns do not show it again").
+- **`watch_video`**, when you have it: give it the video's path in your
+  workspace and a question; the gateway's video model watches the whole
+  video and answers. One call per question, counted by the video's length
+  (about 110 tokens a second); ask a follow-up as another call. A video over
+  its size limit: cut the part the question is about with ffmpeg (below)
+  and ask about the clip.
+- **This pack** for what those do not give: frames or a clip to send, a
+  check of a detail you want to see yourself, or when neither is there or
+  `watch_video` says it cannot (a format it does not take: convert it with
+  ffmpeg first).
+
+Relay what `watch_video` says as the video model's answer, and say when you
+checked it yourself.
+
+## This skill and upstream's
 
 This skill has what you need from upstream's. Its own is at
 `/opt/havn/watch/upstream/skills/watch/SKILL.md`, outside your workspace,
@@ -196,9 +222,10 @@ questions; agents using this pack answered 68% (deepseek) and 72% (Gemini
 too), at three to seven times the cost and fifteen to thirty-five times the
 time. When a
 question turns on motion, exact timing or on-screen text through a long
-video, and your answer is unsure, say so and tell the user that a model
-that takes video (Gemini) would answer it better; with a Gemini key, the
-next section is that way.
+video, and your answer is unsure: use `watch_video` if you have it; if not,
+say so and tell the user that a model that takes video (Gemini) would
+answer it better, through the gateway's `[video]` (Havn 0.2.17 and later)
+or, with a Gemini key, the next section.
 
 ## Gemini (optional)
 

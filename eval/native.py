@@ -39,6 +39,11 @@ def ask(video: Path, text: str) -> dict[str, Any]:
     except urllib.error.HTTPError as e:
         return {"answer": "", "error": f"HTTP {e.code}: {e.read().decode()[:400]}",
                 "seconds": round(time.monotonic() - start, 1)}
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        return {"answer": "", "error": f"{type(e).__name__}: {e}", "seconds": round(time.monotonic() - start, 1)}
+    if not reply.get("choices"):
+        return {"answer": "", "error": f"no choices: {json.dumps(reply)[:400]}",
+                "seconds": round(time.monotonic() - start, 1)}
     usage: dict[str, Any] = reply.get("usage") or {}
     return {"answer": reply["choices"][0]["message"].get("content") or "",
             "seconds": round(time.monotonic() - start, 1),

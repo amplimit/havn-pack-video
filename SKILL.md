@@ -66,22 +66,33 @@ the path.
    between sampled frames, sound you could not transcribe, a part of the
    video you left out.
 
-Three rules the pack's evaluation (`eval/RESULTS.md`) showed are needed:
+Three rules the pack's evaluation (8 videos, 58 questions) showed are
+needed:
 
 - **Read text only from a large single frame.** Code, numbers, captions and
-  labels: one frame at least 1024 px wide (`--timestamps T --resolution
-  1024`, or one ffmpeg frame at full size). In a contact sheet, or a tile
-  you make of small frames, text is too small to read, and models given
-  one write down text that is not in the video. If you cannot read it, say
-  so; never fill in text you did not read.
+  labels: one frame at the source's full width, at most 1568 px (with
+  havn-watch, `--timestamps T --resolution W` with W the video's width, or
+  1024 for a larger video; or one ffmpeg frame at full size, below). In a
+  contact sheet, or a tile you make of small frames, text is too small to
+  read, and models given one wrote down text that is not in the video. If
+  you cannot read it, say so; never fill in text you did not read.
 - **Measure what you count or time.** Frames sampled every few seconds miss
   a one-second event. To count events or time a change to the second, let
-  ffmpeg measure: scene changes (`-vf "select='gt(scene,0.3)',showinfo" -f
-  null -`) or a frame's colour (`signalstats`), then look at the frames it
-  found.
-- **Stop in time.** A question set takes about 20 to 40 tool calls. Your
-  turn ends at the policy's tool-round limit (100 by default) with no
-  answer: well before it, answer with what you have and say what is left.
+  ffmpeg measure, then look at the frames it found: scene changes
+
+  ```bash
+  /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -nostdin -threads 1 -filter_threads 1 -i "inbox/clip.mp4" \
+    -threads 1 -vf "select='gt(scene,0.3)',showinfo" -f null - 2>&1 | grep pts_time
+  ```
+
+  or a region's colour over time (`signalstats`). A small event (a corner
+  icon, a light) hardly changes the whole frame: `crop` to its region
+  first (`-vf "crop=W:H:X:Y,select=..."`).
+- **Stop in time.** Your turn ends at the policy's tool-round limit (100 by
+  default; calls made together count as one round) with no answer at all.
+  On a long video, plan the passes before you start, make independent calls
+  together, and answer well before the limit with what you have, saying
+  what is left.
 
 Take only what the task needs:
 
@@ -127,10 +138,11 @@ Long jobs: a command runs for 300 s unless you give the shell tool a
 (`wait`, `read`). When you have your answer, remove the run's directory
 (`rm -r video/watch-<id>`) unless the user wants its files; never delete the
 source video. Remove it in a step of its own, never in the same batch of
-calls as a `view_image` of a file in it. Before Havn 0.2.17, an image whose
-file is gone is no longer shown in later requests: its earlier result then
-reads "not shown: it is not there any more". That is the removal, not a
-view that failed: what you saw then still holds.
+calls as a `view_image` of a file in it. On Havn 0.2.16 and earlier (until
+amplimit/Havn#354 is released), an image whose file is gone is no longer
+shown in later requests: its earlier result then reads "not shown: it is
+not there any more". That is the removal, not a view that failed: what you
+saw then still holds.
 
 ## Transcribe
 
@@ -179,9 +191,10 @@ unavailable`, your process cap is too low (the pack asks for `pids_max`
 ## When a model that watches video does better
 
 Frames and a transcript lose much of a video. In the pack's evaluation
-(`eval/RESULTS.md`: 8 videos, 58 questions), Gemini given the whole video
-answered 99% of the questions; agents using this pack answered 72 to 73%,
-on Gemini too, at several times the cost and many times the time. When a
+(8 videos, 58 questions), Gemini given the whole video answered 99% of the
+questions; agents using this pack answered 68% (deepseek) and 72% (Gemini
+too), at three to seven times the cost and fifteen to thirty-five times the
+time. When a
 question turns on motion, exact timing or on-screen text through a long
 video, and your answer is unsure, say so and tell the user that a model
 that takes video (Gemini) would answer it better; with a Gemini key, the

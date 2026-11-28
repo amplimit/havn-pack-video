@@ -130,7 +130,7 @@ def g4(out_dir: Path, work: Path) -> None:
                           text_filter(work, "g4file", "shop.py", 0, 120, "30", "20", 22, color="0x9090ff")]
     for n, ((text, a, b), row) in enumerate(zip(code, rows)):
         filters.append(text_filter(work, f"g4c{n}", text, a, b, "30", str(70 + row * 34), 22, color="0xd0ffd0"))
-    filters.append(f"drawbox=x=0:y=300:w=iw:h=180:color=0x000000:t=fill:enable='between(t,50,120)'")
+    filters.append("drawbox=x=0:y=300:w=iw:h=180:color=0x000000:t=fill:enable='between(t,50,120)'")
     terminal: list[tuple[str, float, float, int]] = [
         ("$ python shop.py", 50, 120, 0),
         ("43.199999999999996", 55, 120, 1),
@@ -143,6 +143,7 @@ def g4(out_dir: Path, work: Path) -> None:
                                    (62, "The result has too many decimal places."),
                                    (73, "So we round it to two places.")], work)
     render("g4", 120, 25, filters, track, out_dir, work)
+
 
 # Openly licensed real videos, and the part of each that is used.
 REAL: list[tuple[str, str, float | None]] = [

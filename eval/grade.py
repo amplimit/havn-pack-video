@@ -30,7 +30,16 @@ def judge(key: str, questions: list[dict[str, str]], answer: str, tolerance: int
     with urllib.request.urlopen(request, timeout=300) as response:
         text: str = json.loads(response.read())["choices"][0]["message"]["content"]
     found: re.Match[str] | None = re.search(r"\[.*\]", text, re.S)
-    return json.loads(found.group(0)) if found else []
+    if not found:
+        raise ValueError("the judge's reply has no list of scores")
+    scores: list[dict[str, Any]] = json.loads(found.group(0))
+    if sorted(int(s["n"]) for s in scores) != list(range(1, len(questions) + 1)):
+        raise ValueError("the judge's scores do not cover every question once")
+    return scores
+
+
+def answered(answer: str) -> bool:
+    return bool(answer) and not re.search(r"\(Stopped after \d+ tool rounds", answer)
 
 
 def main() -> None:
@@ -44,8 +53,18 @@ def main() -> None:
         run: dict[str, Any] = json.loads(result.read_text())
         item: dict[str, Any] = next(s for s in sets if s["video"] == run["video"])
         tolerance: int = 2 if item["kind"] == "generated" else 3
-        scores: list[dict[str, Any]] = judge(key, item["questions"], run.get("answer") or "", tolerance) \
-            if run.get("answer") else [{"n": n, "score": 0, "note": "no answer"} for n in range(1, len(item["questions"]) + 1)]
+        answer: str = run.get("answer") or ""
+        scores: list[dict[str, Any]]
+        if answered(answer):
+            try:
+                scores = judge(key, item["questions"], answer, tolerance)
+            except (ValueError, KeyError, OSError) as e:
+                print(f"{result.stem}: not graded ({e})", flush=True)
+                continue
+        else:
+            note: str = ("no answer: stopped at the tool-round limit; interim narration not graded"
+                         if answer else "no answer")
+            scores = [{"n": n, "score": 0, "note": note} for n in range(1, len(item["questions"]) + 1)]
         graded.parent.mkdir(exist_ok=True)
         graded.write_text(json.dumps({"run": result.stem, "scores": scores}, indent=1))
         total: float = sum(float(s["score"]) for s in scores)

@@ -1,0 +1,17 @@
+{
+ "answer": "Here are the answers to your questions:\n\n1. \"THE BLENDER FOUNDATION presents\"\n2. *Sintel*, appearing at 00:40\n3. A small dragon (or baby dragon)\n4. It opens in snowy mountains and ends in a desert (sand dunes) before the title appears.\n5. Red\n6. Halina Reijn and Thom Hoffman\n7. http://durian.blender.org\n8. Creative Commons Attribution 3.0",
+ "seconds": 7.2,
+ "prompt_tokens": 4902,
+ "completion_tokens": 477,
+ "cost": 0.00546525,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 1299,
+  "video_tokens": 3432
+ },
+ "arm": "A",
+ "video": "r3.mp4",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 4372373
+}

@@ -1,0 +1,40 @@
+{
+ "run": "A-g3",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "12 matches"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "time and title correct"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "12% matches"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "Lisbon"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "Falcon matches"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "text and time correct"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "slide 7"
+  }
+ ]
+}

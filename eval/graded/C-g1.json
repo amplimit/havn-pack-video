@@ -1,0 +1,35 @@
+{
+ "run": "C-g1",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "lantern correct"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "seven correct"
+  },
+  {
+   "n": 3,
+   "score": 0,
+   "note": "Said no code shown; reference CODE 4417 00:12-00:15"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "blue, green, red correct"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "red correct"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "red correct"
+  }
+ ]
+}

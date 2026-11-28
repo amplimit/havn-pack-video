@@ -1,0 +1,35 @@
+{
+ "run": "A-g1",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "matches"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "seven matches"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "code and times match"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "order matches"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "red"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "red"
+  }
+ ]
+}

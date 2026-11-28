@@ -1,0 +1,35 @@
+{
+ "run": "B-g4",
+ "scores": [
+  {
+   "n": 1,
+   "score": 0,
+   "note": "Wrong function name and parameters (add_tax, cart, rate)"
+  },
+  {
+   "n": 2,
+   "score": 0,
+   "note": "0.075 instead of 0.08"
+  },
+  {
+   "n": 3,
+   "score": 0,
+   "note": "Said nothing printed; reference 43.199999999999996"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "round(...,2) wrap at 01:19, within 2s of 01:20"
+  },
+  {
+   "n": 5,
+   "score": 0,
+   "note": "Gave 14.38 instead of 43.2"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Too many decimal places matches"
+  }
+ ]
+}

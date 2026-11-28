@@ -1,0 +1,17 @@
+{
+ "answer": "1. Lantern\n2. Seven\n3. CODE 4417, from 00:12 to 00:15\n4. Blue, green, red\n5. Red\n6. Red",
+ "seconds": 5.0,
+ "prompt_tokens": 2864,
+ "completion_tokens": 673,
+ "cost": 0.00467175,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 750,
+  "video_tokens": 1980
+ },
+ "arm": "A",
+ "video": "g1.webm",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 137805
+}

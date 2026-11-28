@@ -1,0 +1,45 @@
+{
+ "run": "B-r3",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "Text matches, time 00:09"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "SINTEL at ~00:43, within 3s of 00:41"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "Dragon"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "Snowy mountains; desert dunes"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "Red/auburn"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Names correct"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "URL correct"
+  },
+  {
+   "n": 8,
+   "score": 1,
+   "note": "CC Attribution 3.0 correct"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "run": "C-g2",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "82 matches"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "north pier"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "text and time match"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "Marta"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "3 times, directions and times match"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "6 matches"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "4 times, all times match"
+  },
+  {
+   "n": 8,
+   "score": 1,
+   "note": "purple"
+  }
+ ]
+}

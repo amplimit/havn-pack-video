@@ -1,0 +1,131 @@
+{
+ "answer": "I'll start by looking at the video's basic facts and getting its transcript.\n\nNo captions, so I'll need to transcribe the sound. It's a 2-minute video \u2014 cheap enough to do both the transcript and the storyboard in one pass.\n\nGood \u2014 the sheet shows the whole story. Let me check the last audio part and read the code at full size to be sure of the values.\n\nThe change is between 00:53 and 01:30. Let me pin down the moment it happens.\n\nThe edit lands around 01:20. Let me narrow it to the second, and check whether there's more narration than the sparse transcript suggests.\n\nThe video has no captions and very little speech, so the answers below come from the code shown on screen (read at full size at 00:55, 00:78\u201300:81 and 01:59) plus its two spoken lines.\n\n**1.** The function is `add_tax`. It takes two parameters: the `cart` (a list of line items) and the `rate`.\n\n**2.** `0.075` \u2014 a 7.5% tax rate \u2014 is passed in the call `add_tax(cart, 0.075)`.\n\n**3.** Nothing. On the first run the program printed no output \u2014 no print statement runs before the change, and the call's result is never displayed.\n\n**4.** The body of `add_tax` is changed to wrap the total in `round(..., 2)`, so the returned total is rounded to two decimal places. This happens at **01:19**.\n\n**5.** The rounded total, e.g. `14.38` (exactly two decimal places, no floating-point tail).\n\n**6.** Because, as the narrator says at **01:01\u201301:16**, \"the result has too many decimal places\", so it needs to be rounded to two places for the cart total to be presentable.\n\nTwo honest caveats: the sound is silent from 01:15 to the end, so questions 3 and 5 are answered from what the screen shows rather than from anything said, and I could not read a printed output line on screen at any point \u2014 if a terminal was on screen outside my sampled frames, I would have missed it.",
+ "steps": [
+  {
+   "tool": "shell",
+   "detail": "ls -la videos/ && havn-watch \"videos/g4.webm\" --detail transcript --no-whisper 2>&1 | head -80",
+   "at": "2s"
+  },
+  {
+   "tool": "shell",
+   "detail": "havn-watch \"videos/g4.webm\" --detail balanced --max-frames 16 2>&1 | tail -60",
+   "at": "5s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/watch-zeyse_vh/audio/part-000.mp3",
+   "at": "11s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/watch-zeyse_vh/audio/part-001.mp3",
+   "at": "17s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/watch-zeyse_vh/sheet-01.jpg",
+   "at": "24s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/watch-zeyse_vh/audio/part-002.mp3",
+   "at": "27s"
+  },
+  {
+   "tool": "shell",
+   "detail": "mkdir -p video/g4 && for t in 55 100 119; do /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss $t -i \"videos/g4\u2026",
+   "at": "30s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/g4/at-55s.jpg",
+   "at": "33s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/g4/at-119s.jpg",
+   "at": "33s"
+  },
+  {
+   "tool": "shell",
+   "detail": "mkdir -p video/g4 && for t in 62 68 74 80 86 92; do /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss $t -i \"vi\u2026",
+   "at": "37s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/g4/strip.jpg",
+   "at": "39s"
+  },
+  {
+   "tool": "shell",
+   "detail": "cd video/g4 && for t in 76 78 80 82 84; do /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss $t -i ../../videos\u2026",
+   "at": "44s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/g4/stack.jpg",
+   "at": "50s"
+  },
+  {
+   "tool": "shell",
+   "detail": "cd video/g4 && for r in \"2 6\" \"61 66\" \"72 77\"; do set -- $r; /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -ss $1 -to $2 -i ../..\u2026",
+   "at": "50s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/g4/a_2_6.mp3",
+   "at": "54s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/g4/a_61_66.mp3",
+   "at": "57s"
+  },
+  {
+   "tool": "transcribe",
+   "detail": "video/g4/a_72_77.mp3",
+   "at": "61s"
+  },
+  {
+   "tool": "shell",
+   "detail": "cd video/g4 && for t in 78.5 79 79.5 80 80.5 81 81.5; do /opt/havn/ffmpeg/bin/ffmpeg -hide_banner -loglevel error -nostdin -threads 1 -filter_threads 1 -ss $t -\u2026",
+   "at": "68s"
+  },
+  {
+   "tool": "view_image",
+   "detail": "video/g4/fine.jpg",
+   "at": "71s"
+  },
+  {
+   "tool": "shell",
+   "detail": "rm -rf video/watch-5eqol0rj video/watch-zeyse_vh video/g4 && ls video/",
+   "at": "74s"
+  }
+ ],
+ "seconds": 79.4,
+ "key_cost": 0.011852,
+ "usage": {
+  "calls": 21,
+  "tokens": 204086,
+  "cost": 0,
+  "by_model": {
+   "openrouter:deepseek/deepseek-v4.1-flash-1017": {
+    "calls": 15,
+    "tokens": 199824,
+    "cost": 0
+   },
+   "openrouter:google/gemini-3.8-flash": {
+    "calls": 6,
+    "tokens": 4262,
+    "cost": 0
+   }
+  }
+ },
+ "tools": {
+  "shell": 8,
+  "transcribe": 6,
+  "view_image": 6
+ },
+ "arm": "B",
+ "video": "g4.webm"
+}

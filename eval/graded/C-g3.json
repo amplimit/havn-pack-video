@@ -1,0 +1,40 @@
+{
+ "run": "C-g3",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "12 matches"
+  },
+  {
+   "n": 2,
+   "score": 0.5,
+   "note": "Time correct, title wrong (Regional Performance vs OFFICES)"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "12% matches"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "Lisbon"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "Falcon"
+  },
+  {
+   "n": 6,
+   "score": 0.5,
+   "note": "Time correct, text wrong"
+  },
+  {
+   "n": 7,
+   "score": 0,
+   "note": "Said slide 8, reference slide 7"
+  }
+ ]
+}

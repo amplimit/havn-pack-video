@@ -1,0 +1,45 @@
+{
+ "run": "A-r1",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "matches 5\u201350 nm"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "characteristic X-rays"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "low small, high large"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "sharp peak"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "00:39"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "secondary electron image"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "beam misses star, invisible"
+  },
+  {
+   "n": 8,
+   "score": 1,
+   "note": "text correct, start 10:08 within tolerance"
+  }
+ ]
+}

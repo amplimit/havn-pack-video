@@ -1,0 +1,35 @@
+{
+ "run": "B-g1",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "lantern"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "seven"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "4417, 00:12\u201300:15; 'CODE' prefix omitted but code matches"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "blue, green, red"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "red"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "red"
+  }
+ ]
+}

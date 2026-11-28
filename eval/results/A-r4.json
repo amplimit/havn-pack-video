@@ -1,0 +1,17 @@
+{
+ "answer": "Here are the answers to your questions:\n\n1. She calls him a jerk; his name is Thom.\n2. Celia.\n3. He says he just wants to be \"awesome in space.\"\n4. Her hand (robot hand).\n5. *Tears of Steel*, shown at 01:05.\n6. A brain.\n7. A sniper rifle (gun).\n8. They use the name Barley, and Barley says they should have about 10 minutes.",
+ "seconds": 18.2,
+ "prompt_tokens": 20617,
+ "completion_tokens": 548,
+ "cost": 0.01751775,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 6000,
+  "video_tokens": 14400
+ },
+ "arm": "A",
+ "video": "r4.webm",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 24049992
+}

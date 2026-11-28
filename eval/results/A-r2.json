@@ -1,0 +1,17 @@
+{
+ "answer": "1. Big Buck Bunny\n2. A bird\n3. He comes out from a burrow/hole beneath a tree. His face first appears at approximately 00:41 (or 00:49 as he raises his head into the light).\n4. Purple / pink\n5. An apple\n6. Two squirrels (including a flying squirrel) and a chinchilla\n7. No, there is no spoken dialogue.",
+ "seconds": 22.5,
+ "prompt_tokens": 16549,
+ "completion_tokens": 984,
+ "cost": 0.01610175,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 4499,
+  "video_tokens": 11880
+ },
+ "arm": "A",
+ "video": "r2.webm",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 20861669
+}

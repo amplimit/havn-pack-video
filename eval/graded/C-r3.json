@@ -1,0 +1,45 @@
+{
+ "run": "C-r3",
+ "scores": [
+  {
+   "n": 1,
+   "score": 0,
+   "note": "Said 'this spring...' instead of 'The Blender Foundation presents'"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "Sintel, 00:40 within tolerance"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "Baby dragon matches"
+  },
+  {
+   "n": 4,
+   "score": 0.5,
+   "note": "Opening correct; last scene 'rocky canyon / desert' is vague, not sand dunes"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "Red/auburn"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Both names correct"
+  },
+  {
+   "n": 7,
+   "score": 0.5,
+   "note": "Gave sintel.org as primary, mentioned durian.blender.org secondarily; not exact URL"
+  },
+  {
+   "n": 8,
+   "score": 1,
+   "note": "CC Attribution 3.0"
+  }
+ ]
+}

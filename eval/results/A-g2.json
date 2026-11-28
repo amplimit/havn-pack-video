@@ -1,0 +1,17 @@
+{
+ "answer": "1. 82\n2. North Pier\n3. \"STEP 2: OPEN THE GATE\", appearing at 02:10\n4. Marta\n5. 3 times:\n - First: left to right\n - Second: right to left\n - Third: left to right\n6. 6 times\n7. 4 times, at 00:50, 01:40, 02:40, and 03:40\n8. Purple",
+ "seconds": 14.1,
+ "prompt_tokens": 27475,
+ "completion_tokens": 1460,
+ "cost": 0.02608125,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 7500,
+  "video_tokens": 19800
+ },
+ "arm": "A",
+ "video": "g2.webm",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 1239426
+}

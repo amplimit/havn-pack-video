@@ -1,0 +1,17 @@
+{
+ "answer": "1. 12\n2. Slide 7 appears at 09:00, and its title is \"OFFICES\".\n3. 12%\n4. Lisbon\n5. Falcon\n6. It says \"ALERT: DOOR 9 OPEN\" at 14:22.\n7. Slide 7",
+ "seconds": 11.1,
+ "prompt_tokens": 109354,
+ "completion_tokens": 732,
+ "cost": 0.0847605,
+ "details": {
+  "cached_tokens": 0,
+  "cache_write_tokens": 0,
+  "audio_tokens": 30003,
+  "video_tokens": 79200
+ },
+ "arm": "A",
+ "video": "g3.webm",
+ "model": "google/gemini-3.8-flash",
+ "bytes": 4538367
+}

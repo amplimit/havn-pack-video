@@ -1,0 +1,35 @@
+{
+ "run": "C-g4",
+ "scores": [
+  {
+   "n": 1,
+   "score": 0,
+   "note": "Wrong function name and parameters"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "0.08 correct"
+  },
+  {
+   "n": 3,
+   "score": 0,
+   "note": "Wrong printed value"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "round(...,2) wrap, 01:19 within tolerance of 01:20"
+  },
+  {
+   "n": 5,
+   "score": 0,
+   "note": "32.23 vs 43.2"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Too many decimal places"
+  }
+ ]
+}

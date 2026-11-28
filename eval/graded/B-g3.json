@@ -1,0 +1,40 @@
+{
+ "run": "B-g3",
+ "scores": [
+  {
+   "n": 1,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 2,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 3,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 4,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 5,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 6,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  },
+  {
+   "n": 7,
+   "score": 0,
+   "note": "no answer: stopped at the tool-round limit; interim narration not graded"
+  }
+ ]
+}

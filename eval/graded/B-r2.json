@@ -1,0 +1,40 @@
+{
+ "run": "B-r2",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "Big Buck Bunny"
+  },
+  {
+   "n": 2,
+   "score": 0,
+   "note": "Not answered / unconfirmed"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "Burrow in mound; face ~00:47 within 3s of 00:49"
+  },
+  {
+   "n": 4,
+   "score": 0,
+   "note": "Not confirmed; no colour given"
+  },
+  {
+   "n": 5,
+   "score": 0,
+   "note": "Said red-orange mushroom, reference is red apple"
+  },
+  {
+   "n": 6,
+   "score": 0.5,
+   "note": "Rodents, flying squirrel right, but two chinchillas instead of squirrel + chinchilla"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "No dialogue, music and effects"
+  }
+ ]
+}

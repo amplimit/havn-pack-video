@@ -1,0 +1,290 @@
+[
+ {
+  "video": "g1.webm",
+  "kind": "generated",
+  "length": "00:30",
+  "questions": [
+   {
+    "q": "What is the secret word that is said in the video?",
+    "a": "lantern"
+   },
+   {
+    "q": "How many boats does the speaker say left the harbor?",
+    "a": "seven (7)"
+   },
+   {
+    "q": "What code is shown on screen, and from when to when (MM:SS)?",
+    "a": "CODE 4417, from 00:12 to 00:15"
+   },
+   {
+    "q": "List the background colours in the order they appear.",
+    "a": "blue, green, red"
+   },
+   {
+    "q": "What colour is the background at 00:25?",
+    "a": "red"
+   },
+   {
+    "q": "What colour is the background while the speaker talks about boats?",
+    "a": "red"
+   }
+  ]
+ },
+ {
+  "video": "g2.webm",
+  "kind": "generated",
+  "length": "05:00",
+  "questions": [
+   {
+    "q": "What pressure reading does the narrator give?",
+    "a": "82 (eighty-two)"
+   },
+   {
+    "q": "Where is the meeting point, according to the narrator?",
+    "a": "the north pier"
+   },
+   {
+    "q": "What does step 2 say, and when does it first appear (MM:SS)?",
+    "a": "STEP 2: OPEN THE GATE, at 02:10"
+   },
+   {
+    "q": "Who should be called in step 3?",
+    "a": "MARTA"
+   },
+   {
+    "q": "How many times does a yellow square cross the screen, and in which direction each time?",
+    "a": "3 times: left to right (00:20), right to left (01:55), left to right (04:10)"
+   },
+   {
+    "q": "How many times does a red square appear in the top-right corner?",
+    "a": "6 times"
+   },
+   {
+    "q": "How many times does the background colour change, and at what times (MM:SS)?",
+    "a": "4 times: 00:50, 01:40, 02:40, 03:40"
+   },
+   {
+    "q": "What colour is the background when the narrator mentions the meeting point?",
+    "a": "purple"
+   }
+  ]
+ },
+ {
+  "video": "g3.webm",
+  "kind": "generated",
+  "length": "20:00",
+  "questions": [
+   {
+    "q": "How many numbered slides are shown in the video?",
+    "a": "12"
+   },
+   {
+    "q": "When does slide 7 appear (MM:SS), and what is its title?",
+    "a": "09:00, OFFICES"
+   },
+   {
+    "q": "By how much did revenue grow, according to the speaker?",
+    "a": "twelve percent (12%)"
+   },
+   {
+    "q": "Where does the new office open?",
+    "a": "Lisbon"
+   },
+   {
+    "q": "What is the project's code name?",
+    "a": "falcon"
+   },
+   {
+    "q": "A short yellow alert banner appears once. What does it say, and when (MM:SS)?",
+    "a": "ALERT: DOOR 9 OPEN, at 14:22"
+   },
+   {
+    "q": "Which slide number is on screen when the speaker mentions the new office?",
+    "a": "slide 7"
+   }
+  ]
+ },
+ {
+  "video": "g4.webm",
+  "kind": "generated",
+  "length": "02:00",
+  "questions": [
+   {
+    "q": "What is the name of the function written in the video, and what parameters does it take?",
+    "a": "total_price, with parameters items and tax"
+   },
+   {
+    "q": "What tax rate is passed in the call to the function?",
+    "a": "0.08"
+   },
+   {
+    "q": "What did the program print the first time it was run?",
+    "a": "43.199999999999996"
+   },
+   {
+    "q": "What change is made to the code, and when (MM:SS)?",
+    "a": "the return line is wrapped in round(..., 2) to round to two decimal places, at 01:20"
+   },
+   {
+    "q": "What did the program print after the change?",
+    "a": "43.2"
+   },
+   {
+    "q": "Why does the narrator say the change is needed?",
+    "a": "the result has too many decimal places"
+   }
+  ]
+ },
+ {
+  "video": "r1.webm",
+  "kind": "real",
+  "length": "10:34",
+  "questions": [
+   {
+    "q": "According to the lecturer, how deep is the top layer where secondary electrons come from?",
+    "a": "between 5 and 50 nanometers"
+   },
+   {
+    "q": "Which signal comes from the bottom part of the drop-shaped interaction volume?",
+    "a": "characteristic X-rays"
+   },
+   {
+    "q": "How does the accelerating voltage change the size of the interaction volume?",
+    "a": "low voltage gives a small volume, high voltage a big one"
+   },
+   {
+    "q": "Of the three surface examples the lecturer draws (an edge/corner, a flat or hollow mid section, a sharp peak), which gives the strongest signal or highest contrast?",
+    "a": "the sharp peak (spike)"
+   },
+   {
+    "q": "When does the video first switch from the camera to a drawing on the tablet (MM:SS)?",
+    "a": "00:39"
+   },
+   {
+    "q": "At about 04:03 the video cuts to a grey micrograph. What label is written in its top-right corner?",
+    "a": "secondary electron image"
+   },
+   {
+    "q": "In the drawing of the raster scan, what happens to the small feature (the star) when the tiny beam scans past it?",
+    "a": "the beam passes the star and does not see it (it is missed, invisible)"
+   },
+   {
+    "q": "What question is written in capital letters at the bottom of the drawing near the end, and when does it appear (MM:SS)?",
+    "a": "HOW DO YOU KNOW THE SIZE OF THE BEAM SPOT?, written from about 10:07 to 10:10"
+   }
+  ]
+ },
+ {
+  "video": "r2.webm",
+  "kind": "real",
+  "length": "03:00",
+  "questions": [
+   {
+    "q": "What title is shown at the very start?",
+    "a": "Big Buck Bunny"
+   },
+   {
+    "q": "What animal sits on a tree branch at about 00:21?",
+    "a": "a bird (a plump purple-grey bird)"
+   },
+   {
+    "q": "Where does the big rabbit come out from, and when does his face first appear (MM:SS)?",
+    "a": "from a burrow (a hole under a grassy mound by a tree); his face appears at about 00:49"
+   },
+   {
+    "q": "What colour is the butterfly that flies around the rabbit?",
+    "a": "pink / purple"
+   },
+   {
+    "q": "What does the rabbit pick up from the grass at about 01:30?",
+    "a": "a red apple (fruit)"
+   },
+   {
+    "q": "At about 02:03 three animals are seen together, one holding a nut. What animals are they?",
+    "a": "rodents: a brown flying squirrel, a red squirrel and a grey chinchilla"
+   },
+   {
+    "q": "Is there any spoken dialogue in the clip?",
+    "a": "no, only music and sound effects"
+   }
+  ]
+ },
+ {
+  "video": "r3.mp4",
+  "kind": "real",
+  "length": "00:52",
+  "questions": [
+   {
+    "q": "What text appears on the black screen at about 00:09?",
+    "a": "The Blender Foundation presents"
+   },
+   {
+    "q": "What is the film's title, and when does it first appear (MM:SS)?",
+    "a": "SINTEL, at about 00:41"
+   },
+   {
+    "q": "What kind of creature flies with the girl?",
+    "a": "a dragon (a small young dragon)"
+   },
+   {
+    "q": "In what landscape does the trailer open, and in what landscape is the last scene before the title?",
+    "a": "snowy mountains; a desert of sand dunes"
+   },
+   {
+    "q": "What colour is the girl's hair?",
+    "a": "red / auburn"
+   },
+   {
+    "q": "Which two actors are named in the end credits?",
+    "a": "Halina Reijn and Thom Hoffman"
+   },
+   {
+    "q": "What web address is given in the end credits?",
+    "a": "http://durian.blender.org"
+   },
+   {
+    "q": "Under which licence was the film released, according to the credits?",
+    "a": "Creative Commons Attribution 3.0"
+   }
+  ]
+ },
+ {
+  "video": "r4.webm",
+  "kind": "real",
+  "length": "04:00",
+  "questions": [
+   {
+    "q": "In the first scene on the bridge, what does the woman call the man, and what is his name?",
+    "a": "a jerk; Thom"
+   },
+   {
+    "q": "What is the woman's name?",
+    "a": "Celia"
+   },
+   {
+    "q": "What does the man say he wants to be?",
+    "a": "awesome in space"
+   },
+   {
+    "q": "Which part of the woman's body is robotic, according to the dialogue?",
+    "a": "her hand"
+   },
+   {
+    "q": "What is the film's title, and when is it shown (MM:SS)?",
+    "a": "Tears of Steel, at about 01:05"
+   },
+   {
+    "q": "What object lies on a plate under glowing arcs at about 00:56?",
+    "a": "a brain"
+   },
+   {
+    "q": "What is the young man in the tower aiming at the flying ship between about 01:24 and 02:28?",
+    "a": "a sniper rifle (a rifle with a scope)"
+   },
+   {
+    "q": "At about 03:17 someone asks how things are looking. What name do they use, and how much time do they say they have?",
+    "a": "Barley; about ten minutes"
+   }
+  ]
+ }
+]

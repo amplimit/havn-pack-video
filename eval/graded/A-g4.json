@@ -1,0 +1,35 @@
+{
+ "run": "A-g4",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "Name and parameters match"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "0.08 correct"
+  },
+  {
+   "n": 3,
+   "score": 1,
+   "note": "Exact output match"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "round(...,2) at 01:19\u201301:20, within tolerance"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "43.2 correct"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Too many decimal places"
+  }
+ ]
+}

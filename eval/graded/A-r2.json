@@ -1,0 +1,40 @@
+{
+ "run": "A-r2",
+ "scores": [
+  {
+   "n": 1,
+   "score": 1,
+   "note": "Matches"
+  },
+  {
+   "n": 2,
+   "score": 1,
+   "note": "Bird"
+  },
+  {
+   "n": 3,
+   "score": 0.5,
+   "note": "Burrow correct; time hedged between 00:41 and 00:49, ambiguous"
+  },
+  {
+   "n": 4,
+   "score": 1,
+   "note": "Purple/pink matches"
+  },
+  {
+   "n": 5,
+   "score": 1,
+   "note": "Apple matches"
+  },
+  {
+   "n": 6,
+   "score": 1,
+   "note": "Two squirrels and chinchilla matches"
+  },
+  {
+   "n": 7,
+   "score": 1,
+   "note": "No dialogue"
+  }
+ ]
+}
